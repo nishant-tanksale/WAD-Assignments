@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Swipeable Colored Box Gallery</title>
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .box-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .box {
+            width: 50%;
+            height: 50%;
+            background-color: #ccc;
+            border-radius: 5px;
+            position: relative;
+        }
+        .box:nth-child(1) { background-color: #ff0000; }
+        .box:nth-child(2) { background-color: #00ff00; }
+        .box:nth-child(3) { background-color: #0000ff; }
+        .box:nth-child(4) { background-color: #ffff00; }
+        .box:nth-child(5) { background-color: #ff00ff; }
+        .box:nth-child(6) { background-color: #00ffff; }
+        .box:nth-child(7) { background-color: #ffa500; }
+        .box:nth-child(8) { background-color: #a52a2a; }
+        .box:nth-child(9) { background-color: #808080; }
+        .arrow {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #000;
+            border-radius: 50%;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .arrow:hover {
+            background-color: #555;
+        }
+        .arrow-left { left: -40px; top: calc(50% - 15px); }
+        .arrow-right { right: -40px; top: calc(50% - 15px); }
+        .arrow-up { top: -40px; left: calc(50% - 15px); }
+        .arrow-down { bottom: -40px; left: calc(50% - 15px); }
+    </style>
+</head>
+<body>
+    <div data-role="page" id="box-gallery">
+        <div class="box-container">
+            <div class="box">
+                <div class="arrow arrow-up">↑</div>
+                <div class="arrow arrow-left">←</div>
+                <div class="arrow arrow-right">→</div>
+                <div class="arrow arrow-down">↓</div>
+            </div>
+            <!-- Add more boxes here -->
+        </div>
+    </div>
+    <script>
+        $(document).on("pagecreate", "#box-gallery", function () {
+            var currentBoxIndex = 0;
+            var boxes = $(".box");
+            var hammer = new Hammer(document.getElementById("box-gallery"));
+            hammer.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+            hammer.on("swipeup", function () {
+                currentBoxIndex = Math.min(currentBoxIndex + 3, boxes.length - 1);
+                showBox(currentBoxIndex);
+            });
+            hammer.on("swipedown", function () {
+                currentBoxIndex = Math.max(currentBoxIndex - 3, 0);
+                showBox(currentBoxIndex);
+            });
+            hammer.on("swipeleft", function () {
+                currentBoxIndex = Math.min(currentBoxIndex + 1, boxes.length - 1);
+                showBox(currentBoxIndex);
+            });
+            hammer.on("swiperight", function () {
+                currentBoxIndex = Math.max(currentBoxIndex - 1, 0);
+                showBox(currentBoxIndex);
+            });
+
+            function showBox(index) {
+                boxes.hide().eq(index).show();
+            }
+        });
+    </script>
+</body>
+</html>
